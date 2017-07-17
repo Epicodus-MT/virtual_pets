@@ -10,6 +10,16 @@ public class FireMonsterTest {
   @Rule
   public DatabaseRule database = new DatabaseRule();
 
+  @Override
+  public void depleteLevels(){
+    if (isAlive()){
+      playLevel--;
+      foodLevel--;
+      sleepLevel--;
+      fireLevel--;
+    }
+  }
+  
   @Test
   public void fireMonster_instantiatesCorrectly_true() {
     FireMonster testFireMonster = new FireMonster("Bubbles", 1);
@@ -116,6 +126,7 @@ public class FireMonsterTest {
     assertEquals(testFireMonster.getFoodLevel(), (FireMonster.MAX_FOOD_LEVEL / 2) - 1);
     assertEquals(testFireMonster.getSleepLevel(), (FireMonster.MAX_SLEEP_LEVEL / 2) - 1);
     assertEquals(testFireMonster.getPlayLevel(), (FireMonster.MAX_PLAY_LEVEL / 2) - 1);
+    assertEquals(testFireMonster.getFireLevel(), (FireMonster.MAX_FIRE_LEVEL / 2) - 1);
   }
 
   @Test
@@ -288,5 +299,5 @@ public class FireMonsterTest {
     assertTrue(testFireMonster.getFireLevel() > (FireMonster.MAX_FIRE_LEVEL / 2));
   }
 
-    
+
 }

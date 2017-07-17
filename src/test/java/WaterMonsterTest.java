@@ -116,6 +116,7 @@ public class WaterMonsterTest {
     assertEquals(testWaterMonster.getFoodLevel(), (WaterMonster.MAX_FOOD_LEVEL / 2) - 1);
     assertEquals(testWaterMonster.getSleepLevel(), (WaterMonster.MAX_SLEEP_LEVEL / 2) - 1);
     assertEquals(testWaterMonster.getPlayLevel(), (WaterMonster.MAX_PLAY_LEVEL / 2) - 1);
+    assertEquals(testWaterMonster.getWaterLevel(), (WaterMonster.MAX_WATER_LEVEL / 2) - 1);
   }
 
   @Test
@@ -274,4 +275,26 @@ public class WaterMonsterTest {
     assertFalse(testWaterMonster.isAlive());
     assertTrue(testWaterMonster.getFoodLevel() >= 0);
   }
+
+  @Test
+  public void waterMonster_instantiatesWithHalfFullWaterLevel(){
+    WaterMonster testWaterMonster = new WaterMonster("Drippy", 1);
+    assertEquals(testWaterMonster.getWaterLevel(), (WaterMonster.MAX_WATER_LEVEL / 2));
+  }
+
+  @Test
+  public void water_increasesWaterMonsterWaterLevel(){
+    WaterMonster testWaterMonster = new WaterMonster("Drippy", 1);
+    testWaterMonster.water();
+    assertTrue(testWaterMonster.getWaterLevel() > (WaterMonster.MAX_WATER_LEVEL / 2));
+  }
+
+  @Test(expected = UnsupportedOperationException.class)
+  public void kindling_throwsExceptionIfWaterLevelIsAtMaxValue(){
+    WaterMonster testWaterMonster = new WaterMonster("Drippy", 1);
+    for(int i = WaterMonster.MIN_ALL_LEVELS; i <= (WaterMonster.MAX_WATER_LEVEL); i++){
+      testWaterMonster.water();
+    }
+  }
+
 }
