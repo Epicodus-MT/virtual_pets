@@ -1,3 +1,4 @@
+
 import java.util.ArrayList;
 import java.util.List;
 import org.sql2o.*;
@@ -50,6 +51,15 @@ public class Person {
     String sql = "SELECT id, name, email FROM persons";
     try(Connection con = DB.sql2o.open()) {
      return con.createQuery(sql).executeAndFetch(Person.class);
+    }
+  }
+
+  public List<Monster> getMonsters() {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "SELECT * FROM monsters where personId=:id";
+      return con.createQuery(sql)
+        .addParameter("id", this.id)
+        .executeAndFetch(Monster.class);
     }
   }
 
