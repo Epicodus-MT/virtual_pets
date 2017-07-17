@@ -4,6 +4,9 @@ import org.sql2o.*;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.text.DateFormat;
+import java.util.Timer;
+import java.util.TimerTask;
+
 
 public class MonsterTest {
 
@@ -250,6 +253,29 @@ public class MonsterTest {
     Timestamp savedMonsterLastPlayed = Monster.find(testMonster.getId()).getLastPlayed();
     Timestamp rightNow = new Timestamp(new Date().getTime());
     assertEquals(DateFormat.getDateTimeInstance().format(rightNow), DateFormat.getDateTimeInstance().format(savedMonsterLastPlayed));
+  }
+
+  @Test
+  public void timer_executesDepleteLevelsMethod() {
+    Monster testMonster = new Monster("Bubbles", 1);
+    int firstPlayLevel = testMonster.getPlayLevel();
+    testMonster.startTimer();
+    try {
+      Thread.sleep(6000);
+    } catch (InterruptedException exception){}
+    int secondPlayLevel = testMonster.getPlayLevel();
+    assertTrue(firstPlayLevel > secondPlayLevel);
+  }
+
+  @Test
+  public void timer_haltsAfterMonsterDies() {
+    Monster testMonster = new Monster("Bubbles", 1);
+    testMonster.startTimer();
+    try {
+      Thread.sleep(6000);
+    } catch (InterruptedException exception){}
+    assertFalse(testMonster.isAlive());
+    assertTrue(testMonster.getFoodLevel() >= 0);
   }
 
 }
