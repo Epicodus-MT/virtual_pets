@@ -10,16 +10,6 @@ public class FireMonsterTest {
   @Rule
   public DatabaseRule database = new DatabaseRule();
 
-  @Override
-  public void depleteLevels(){
-    if (isAlive()){
-      playLevel--;
-      foodLevel--;
-      sleepLevel--;
-      fireLevel--;
-    }
-  }
-  
   @Test
   public void fireMonster_instantiatesCorrectly_true() {
     FireMonster testFireMonster = new FireMonster("Bubbles", 1);
@@ -299,5 +289,22 @@ public class FireMonsterTest {
     assertTrue(testFireMonster.getFireLevel() > (FireMonster.MAX_FIRE_LEVEL / 2));
   }
 
+  @Test(expected = UnsupportedOperationException.class)
+    public void kindling_throwsExceptionIfFireLevelIsAtMaxValue(){
+    FireMonster testFireMonster = new FireMonster("Smokey", 1);
+    for(int i = FireMonster.MIN_ALL_LEVELS; i <= (FireMonster.MAX_FIRE_LEVEL); i++){
+    testFireMonster.kindling();
+    }
+  }
+
+  @Test
+  public void kindling_recordsTimeLastKindlingInDatabase() {
+    FireMonster testFireMonster = new FireMonster("Bubbles", 1);
+    testFireMonster.save();
+    testFireMonster.kindling();
+    Timestamp savedFireMonsterLastKindling = FireMonster.find(testFireMonster.getId()).getLastKindling();
+    Timestamp rightNow = new Timestamp(new Date().getTime());
+    assertEquals(DateFormat.getDateTimeInstance().format(rightNow), DateFormat.getDateTimeInstance().format(savedFireMonsterLastKindling));
+  }
 
 }
