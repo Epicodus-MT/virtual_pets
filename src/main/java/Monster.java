@@ -6,7 +6,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 
-public class Monster {
+public abstract class Monster {
 
   private String name;
   private int personId;
@@ -152,22 +152,6 @@ public class Monster {
     }
   }
 
-  public static List<Monster> all() {
-    String sql = "SELECT * FROM monsters;";
-    try(Connection con = DB.sql2o.open()) {
-      return con.createQuery(sql).executeAndFetch(Monster.class);
-    }
-  }
-
-  public static Monster find(int id) {
-    try(Connection con = DB.sql2o.open()) {
-      String sql = "SELECT * FROM monsters where id=:id";
-      Monster monster = con.createQuery(sql)
-        .addParameter("id", id)
-        .executeAndFetchFirst(Monster.class);
-      return monster;
-    }
-  }
 
   public void startTimer(){
     Monster currentMonster = this;
